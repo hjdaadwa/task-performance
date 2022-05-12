@@ -1,5 +1,4 @@
 const contacts = document.getElementsByClassName("contacts")[0];
-const stickyHeader = document.getElementsByClassName("stickyHeader")[0];
 
 function addContacts() {
   const fragment = document.createDocumentFragment();
@@ -12,15 +11,20 @@ function addContacts() {
   contacts.appendChild(fragment);
 }
 
-contacts.addEventListener("scroll", (e) => {
-  const items = Array.from(contacts.getElementsByClassName("contact"));
-  const itemOffsets = items.map((item) => item.offsetTop);
-  const topItemIndex = itemOffsets.findIndex(
-    (offset) => contacts.scrollTop - offset <= -18
-  );
-  if (topItemIndex !== -1) {
-    stickyHeader.textContent = items[topItemIndex].textContent;
-  }
-});
+function changeStickyHeader(e) {
+  const topItemIndex = Math.round((e.target.scrollTop + 18) / 18);
+  e.target.firstElementChild.textContent = e.target.children[topItemIndex].textContent;
+}
+  
+function onScrollStop(callback) {
+  let isScrolling;
+  contacts.addEventListener('scroll', (e) => {
+      clearTimeout(isScrolling);
+      isScrolling = setTimeout(() => {
+        callback(e);
+      }, 400);
+    });
+};
 
 addContacts();
+onScrollStop(changeStickyHeader);
