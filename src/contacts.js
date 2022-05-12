@@ -22,7 +22,7 @@ function onScrollStop(callback) {
       clearTimeout(isScrolling);
       isScrolling = setTimeout(() => {
         callback(e);
-      }, 400);
+      },150);
     });
 };
 
